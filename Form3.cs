@@ -9,7 +9,7 @@ namespace battleShip
     {
         private GameData gameData;
         private Button[,] buttons;
-        private int figurePresent = 0;  
+        private int figurePresent = 0;
         private bool placeFigure = true;
 
         public frmPreparation2(GameData gameData)
@@ -46,7 +46,7 @@ namespace battleShip
                 }
             }
         }
-       
+
         private void Button_Click(object sender, EventArgs e)
         {
             if (!placeFigure) return;
@@ -63,11 +63,11 @@ namespace battleShip
                         }
                         else if (figurePresent == 1 && AddFigure_L(j, i))
                         {
-                            figurePresent = 2; 
+                            figurePresent = 2;
                         }
                         else if (figurePresent == 2 && AddFigure2Buttons(j, i))
                         {
-                            placeFigure = false; 
+                            placeFigure = false;
                         }
                         return;
                     }
@@ -116,23 +116,23 @@ namespace battleShip
             {
                 if (initialRow + 1 < 5 && initialColumn + 1 < 5 && CheckAvailableSpaceL(initialRow, initialColumn))
                 {
-                for (int i = 0; i < 2; i++)
-                {
-                    buttons[initialRow + i, initialColumn].BackColor = color;
+                    for (int i = 0; i < 2; i++)
+                    {
+                        buttons[initialRow + i, initialColumn].BackColor = color;
+                    }
+                    buttons[initialRow + 1, initialColumn + 1].BackColor = color;
                 }
-                buttons[initialRow + 1, initialColumn + 1].BackColor = color;
             }
-        }
             else
-        {
-                if (initialRow + length - 1 < 5 && CheckAvailableSpace(initialRow, initialColumn, length))
             {
-                    for (int i = 0; i < length; i++)
+                if (initialRow + length - 1 < 5 && CheckAvailableSpace(initialRow, initialColumn, length))
                 {
-                    buttons[initialRow + i, initialColumn].BackColor = color;
+                    for (int i = 0; i < length; i++)
+                    {
+                        buttons[initialRow + i, initialColumn].BackColor = color;
+                    }
                 }
             }
-        }
         }
 
         void Clear_silhouette()

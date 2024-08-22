@@ -33,8 +33,6 @@
             txtPosition = new TextBox();
             btnAttack = new Button();
             lblTurno = new Label();
-            lblPlayer1Name = new Label();
-            lblPlayer2Name = new Label();
             SuspendLayout();
             // 
             // tableLayoutPanelPlayer1
@@ -46,7 +44,7 @@
             tableLayoutPanelPlayer1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
             tableLayoutPanelPlayer1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
             tableLayoutPanelPlayer1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-            tableLayoutPanelPlayer1.Location = new Point(47, 97);
+            tableLayoutPanelPlayer1.Location = new Point(322, 97);
             tableLayoutPanelPlayer1.Margin = new Padding(3, 4, 3, 4);
             tableLayoutPanelPlayer1.Name = "tableLayoutPanelPlayer1";
             tableLayoutPanelPlayer1.RowCount = 5;
@@ -67,7 +65,7 @@
             tableLayoutPanelPlayer2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
             tableLayoutPanelPlayer2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
             tableLayoutPanelPlayer2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-            tableLayoutPanelPlayer2.Location = new Point(587, 97);
+            tableLayoutPanelPlayer2.Location = new Point(322, 97);
             tableLayoutPanelPlayer2.Margin = new Padding(3, 4, 3, 4);
             tableLayoutPanelPlayer2.Name = "tableLayoutPanelPlayer2";
             tableLayoutPanelPlayer2.RowCount = 5;
@@ -81,6 +79,32 @@
             // 
             // txtPosition
             // 
+            txtPosition.Location = new Point(415, 38);
+            txtPosition.Margin = new Padding(3, 4, 3, 4);
+            txtPosition.Name = "txtPosition";
+            txtPosition.Size = new Size(155, 27);
+            txtPosition.TabIndex = 2;
+            // 
+            // btnAttack
+            // 
+            btnAttack.Location = new Point(600, 29);
+            btnAttack.Margin = new Padding(3, 4, 3, 4);
+            btnAttack.Name = "btnAttack";
+            btnAttack.Size = new Size(86, 45);
+            btnAttack.TabIndex = 3;
+            btnAttack.Text = "Attack";
+            btnAttack.UseVisualStyleBackColor = true;
+            btnAttack.Click += btnAttack_Click;
+            // 
+            // lblTurno
+            // 
+            lblTurno.AutoSize = true;
+            lblTurno.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            lblTurno.Location = new Point(28, 46);
+            lblTurno.Name = "lblTurno";
+            lblTurno.Size = new Size(0, 28);
+            lblTurno.TabIndex = 4;
+            // 
             // frmBattle
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -88,16 +112,15 @@
             BackgroundImage = Properties.Resources.ImagenPri;
             ClientSize = new Size(1063, 577);
             Controls.Add(tableLayoutPanelPlayer2);
-            Controls.Add(lblPlayer2Name);
-            Controls.Add(lblPlayer1Name);
             Controls.Add(lblTurno);
             Controls.Add(btnAttack);
             Controls.Add(txtPosition);
             Controls.Add(tableLayoutPanelPlayer1);
             Margin = new Padding(3, 4, 3, 4);
             Name = "frmBattle";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Battle";
-            Load += frmBattle_Load;
+          
             ResumeLayout(false);
             PerformLayout();
         }
@@ -108,7 +131,5 @@
         private System.Windows.Forms.TextBox txtPosition;
         private System.Windows.Forms.Button btnAttack;
         private System.Windows.Forms.Label lblTurno;
-        private Label lblPlayer1Name;
-        private Label lblPlayer2Name;
     }
 }

@@ -111,30 +111,30 @@ namespace battleShip
         }
 
         private void ShowSilhouette(int initialColumn, int initialRow, Color color, int length, bool isLShape = false)
-                {
+        {
             ClearSilhouette();
 
             if (isLShape)
-        {
+            {
                 if (initialRow + 1 < 5 && initialColumn + 1 < 5 && CheckAvailableSpaceL(initialRow, initialColumn))
-            {
-                for (int i = 0; i < 2; i++)
                 {
-                    buttons[initialRow + i, initialColumn].BackColor = color;
+                    for (int i = 0; i < 2; i++)
+                    {
+                        buttons[initialRow + i, initialColumn].BackColor = color;
+                    }
+                    buttons[initialRow + 1, initialColumn + 1].BackColor = color;
                 }
-                buttons[initialRow + 1, initialColumn + 1].BackColor = color;
             }
-        }
             else
-        {
-                if (initialRow + length - 1 < 5 && CheckAvailableSpace(initialRow, initialColumn, length))
             {
-                    for (int i = 0; i < length; i++)
+                if (initialRow + length - 1 < 5 && CheckAvailableSpace(initialRow, initialColumn, length))
                 {
-                    buttons[initialRow + i, initialColumn].BackColor = color;
+                    for (int i = 0; i < length; i++)
+                    {
+                        buttons[initialRow + i, initialColumn].BackColor = color;
+                    }
                 }
             }
-        }
         }
 
         private void ClearSilhouette()
