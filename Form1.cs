@@ -1,3 +1,6 @@
+using System;
+using System.Windows.Forms;
+
 namespace battleShip
 {
     public partial class FrmWelcome : Form
@@ -9,10 +12,11 @@ namespace battleShip
 
         private void btnNext_Click(object sender, EventArgs e)
         {
-            frmPreparation preparationForm = new frmPreparation();
+
+            GameData gameData = new GameData();
+            frmPreparation preparationForm = new frmPreparation(gameData);
             preparationForm.Show();
             this.Hide();
         }
-
     }
 }

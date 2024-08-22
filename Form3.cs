@@ -1,68 +1,71 @@
 ﻿using System;
-using System.Windows.Forms;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace battleShip
 {
     public partial class frmPreparation2 : Form
     {
+        private GameData gameData;
         private Button[,] buttons;
         private int figurePresent = 0;  
         private bool placeFigure = true;
-        public frmPreparation2()
+
+        public frmPreparation2(GameData gameData)
         {
             InitializeComponent();
-            this.Load += frmPreparation_Load;
+            InitializeTableLayoutPanel();
+            this.gameData = gameData;
         }
-        private void frmPreparation_Load(object sender, EventArgs e)
+
+        private void InitializeTableLayoutPanel()
         {
             string[] rows = { "A", "B", "C", "D", "E" };
             int[] columns = { 1, 2, 3, 4, 5 };
-            buttons = new Button[rows.Length, columns.Length];  //Initialize the button array
-            tableLayoutPanel2.RowCount = rows.Length; //Number of rows and columns
+            buttons = new Button[rows.Length, columns.Length];
+            tableLayoutPanel2.RowCount = rows.Length;
             tableLayoutPanel2.ColumnCount = columns.Length;
+
             tableLayoutPanel2.Controls.Clear();
-            // Add buttons to the tableLayout 
+
             for (int i = 0; i < rows.Length; i++)
             {
                 for (int j = 0; j < columns.Length; j++)
                 {
                     Button button = new Button
                     {
-                        Text = $"{rows[i]}{columns[j]}", //combine the row with the text for the text
-                        Dock = DockStyle.Fill //button covers the entire cell
+                        Text = $"{rows[i]}{columns[j]}",
+                        Dock = DockStyle.Fill
                     };
-                    // Event Click
                     button.Click += Button_Click;
                     button.MouseEnter += Button_MouseEnter;
                     button.MouseLeave += Button_MouseLeave;
-                    //Add the button of the matrix and the tableLayout
                     buttons[i, j] = button;
                     tableLayoutPanel2.Controls.Add(button, j, i);
                 }
             }
         }
-        // Event when a button is clicked
+       
         private void Button_Click(object sender, EventArgs e)
         {
             if (!placeFigure) return;
             Button bbuttonSelect = sender as Button;
-            //Get position of the selected button
             for (int i = 0; i < buttons.GetLength(0); i++)
             {
                 for (int j = 0; j < buttons.GetLength(1); j++)
                 {
                     if (buttons[i, j] == bbuttonSelect)
                     {
-                        if (figurePresent == 0 && AddFigure4Buttons(j, i))  //Figure 4 buttons
+                        if (figurePresent == 0 && AddFigure4Buttons(j, i))
                         {
                             figurePresent = 1;
                         }
-                        else if (figurePresent == 1 && AddFigure_L(j, i)) // Figure in L
+                        else if (figurePresent == 1 && AddFigure_L(j, i))
                         {
                             figurePresent = 2; 
                         }
-                        else if (figurePresent == 2 && AddFigure2Buttons(j, i)) // Figure 3 buttons
+                        else if (figurePresent == 2 && AddFigure2Buttons(j, i))
                         {
                             placeFigure = false; 
                         }
@@ -71,12 +74,11 @@ namespace battleShip
                 }
             }
         }
-        // Show silhouette when mouse enters a button
+
         private void Button_MouseEnter(object sender, EventArgs e)
         {
             if (!placeFigure) return;
             Button botonSeleccionado = sender as Button;
-            //Get position of the selected button
             for (int i = 0; i < buttons.GetLength(0); i++)
             {
                 for (int j = 0; j < buttons.GetLength(1); j++)
@@ -85,45 +87,35 @@ namespace battleShip
                     {
                         if (figurePresent == 0)
                         {
-                            show_silhouette(j, i, Color.LightPink);
+                            ShowSilhouette(j, i, Color.LightPink, 4);
                         }
                         else if (figurePresent == 1)
                         {
-                            ShowFiguresilhouette(j, i, Color.LightBlue);
+                            ShowSilhouette(j, i, Color.LightBlue, 2, true);
                         }
                         else if (figurePresent == 2)
                         {
-                            ShowFigure2ButtonSilhouette(j, i, Color.LightGreen);
+                            ShowSilhouette(j, i, Color.LightGreen, 2);
                         }
                         return;
                     }
                 }
             }
         }
-        // When mouse leaves a button
+
         private void Button_MouseLeave(object sender, EventArgs e)
         {
             if (!placeFigure) return;
             Clear_silhouette();
         }
-        // Show silhouette for 4 button vertical figure
-        void show_silhouette(int initialColumn, int initialRow, Color color)
+
+        void ShowSilhouette(int initialColumn, int initialRow, Color color, int length, bool isLShape = false)
         {
             Clear_silhouette();
-            if (initialRow + 3 < 5 && CheckAvailableSpace(initialRow, initialColumn, 4)) // Check space
+            if (isLShape)
             {
-                for (int i = 0; i < 4; i++)
+                if (initialRow + 1 < 5 && initialColumn + 1 < 5 && CheckAvailableSpaceL(initialRow, initialColumn))
                 {
-                    buttons[initialRow + i, initialColumn].BackColor = color;
-                }
-            }
-        }
-        // Show silhouette for L figure
-        private void ShowFiguresilhouette(int initialColumn, int initialRow, Color color)
-        {
-            Clear_silhouette();
-            if (initialRow + 1 < 5 && initialColumn + 1 < 5 && CheckAvailableSpaceL(initialRow, initialColumn)) // Check space
-            {
                 for (int i = 0; i < 2; i++)
                 {
                     buttons[initialRow + i, initialColumn].BackColor = color;
@@ -131,19 +123,18 @@ namespace battleShip
                 buttons[initialRow + 1, initialColumn + 1].BackColor = color;
             }
         }
-        // Show silhouette for 2 button vertical figure
-        private void ShowFigure2ButtonSilhouette(int initialColumn, int initialRow, Color color)
+            else
         {
-            Clear_silhouette();
-            if (initialRow + 1 < 5 && CheckAvailableSpace(initialRow, initialColumn, 2)) // Check space
+                if (initialRow + length - 1 < 5 && CheckAvailableSpace(initialRow, initialColumn, length))
             {
-                for (int i = 0; i < 2; i++)
+                    for (int i = 0; i < length; i++)
                 {
                     buttons[initialRow + i, initialColumn].BackColor = color;
                 }
             }
         }
-        // Clear all silhouettes
+        }
+
         void Clear_silhouette()
         {
             for (int i = 0; i < buttons.GetLength(0); i++)
@@ -157,56 +148,71 @@ namespace battleShip
                 }
             }
         }
-        // Add 4 button figure
+
         private bool AddFigure4Buttons(int initialColumn, int initialRow)
         {
-            if (initialRow + 3 >= 5 || !CheckAvailableSpace(initialRow, initialColumn, 4)) return false; // Check space
+            if (initialRow + 3 >= 5 || !CheckAvailableSpace(initialRow, initialColumn, 4)) return false;
+
+            // Save positions in GameData
             for (int i = 0; i < 4; i++)
             {
+                string position = $"{(char)('A' + initialRow + i)}{initialColumn + 1}";
+                gameData.Player2Figures.Add(position); // Add occupied positions
                 buttons[initialRow + i, initialColumn].BackColor = Color.Red;
                 buttons[initialRow + i, initialColumn].Text = "V";
-                buttons[initialRow + i, initialColumn].Enabled = false; // Disable button
+                buttons[initialRow + i, initialColumn].Enabled = false;
             }
             return true;
         }
-        // Add 3 button figure in L
+
         private bool AddFigure_L(int initialColumn, int initialRow)
         {
-            if (initialRow + 1 >= 5 || initialColumn + 1 >= 5 || !CheckAvailableSpaceL(initialRow, initialColumn)) return false; // Check space
+            if (initialRow + 1 >= 5 || initialColumn + 1 >= 5 || !CheckAvailableSpaceL(initialRow, initialColumn)) return false;
+
+            // Save positions in GameData
             for (int i = 0; i < 2; i++)
             {
+                string position = $"{(char)('A' + initialRow + i)}{initialColumn + 1}";
+                gameData.Player2Figures.Add(position); // Add occupied positions
                 buttons[initialRow + i, initialColumn].BackColor = Color.Blue;
                 buttons[initialRow + i, initialColumn].Text = "L";
                 buttons[initialRow + i, initialColumn].Enabled = false;
             }
+            string lShapePosition = $"{(char)('A' + initialRow + 1)}{initialColumn + 2}";
+            gameData.Player2Figures.Add(lShapePosition); // Add position figure "L"
             buttons[initialRow + 1, initialColumn + 1].BackColor = Color.Blue;
             buttons[initialRow + 1, initialColumn + 1].Text = "L";
             buttons[initialRow + 1, initialColumn + 1].Enabled = false;
+
             return true;
         }
-        // Add 2 button vertical figure
+
         private bool AddFigure2Buttons(int initialColumn, int initialRow)
         {
-            if (initialRow + 1 >= 5 || !CheckAvailableSpace(initialRow, initialColumn, 2)) return false; // Check space
+            if (initialRow + 1 >= 5 || !CheckAvailableSpace(initialRow, initialColumn, 2)) return false;
+
+            // Save positions in GameData
             for (int i = 0; i < 2; i++)
             {
+                string position = $"{(char)('A' + initialRow + i)}{initialColumn + 1}";
+                gameData.Player2Figures.Add(position); // Add occupied positions
                 buttons[initialRow + i, initialColumn].BackColor = Color.Green;
                 buttons[initialRow + i, initialColumn].Text = "T";
-                buttons[initialRow + i, initialColumn].Enabled = false; // Disable button
+                buttons[initialRow + i, initialColumn].Enabled = false;
             }
             return true;
         }
-        // Check if there is space for vertical figures
-        private bool CheckAvailableSpace(int initialRow, int initialColumn, int longitud)
+
+        private bool CheckAvailableSpace(int initialRow, int initialColumn, int length)
         {
-            if (initialRow + longitud - 1 >= 5) return false;
-            for (int i = 0; i < longitud; i++)
+            if (initialRow + length - 1 >= 5) return false;
+            for (int i = 0; i < length; i++)
             {
                 if (!buttons[initialRow + i, initialColumn].Enabled) return false;
             }
             return true;
         }
-        // Check if there is space for L figure
+
         private bool CheckAvailableSpaceL(int initialRow, int initialColumn)
         {
             if (initialRow + 1 >= 5 || initialColumn + 1 >= 5) return false;
@@ -218,6 +224,7 @@ namespace battleShip
             }
             return true;
         }
+
         private void btnAcepted2_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtNameUser2.Text))
@@ -227,10 +234,11 @@ namespace battleShip
             }
             if (figurePresent < 2 || placeFigure)
             {
-                MessageBox.Show("Please place all the figures before continuing..");
+                MessageBox.Show("Please place all the figures before continuing.");
                 return;
             }
-            frmBattle battleForm = new frmBattle();
+            gameData.Player2Name = txtNameUser2.Text;
+            frmBattle battleForm = new frmBattle(gameData);
             battleForm.Show();
             this.Hide();
         }
