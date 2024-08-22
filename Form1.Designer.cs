@@ -75,7 +75,6 @@
         }
 
         #endregion
-
         private Label lblMessageWelcome;
         private Button btnOpen;
     }

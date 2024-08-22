@@ -171,5 +171,10 @@ namespace battleShip
             string columnStr = position.Substring(1);
             return (row >= 'A' && row <= 'E') && int.TryParse(columnStr, out int column) && column >= 1 && column <= 5;
         }
+
+        private void frmBattle_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }
