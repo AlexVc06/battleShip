@@ -7,11 +7,14 @@ namespace battleShip
 {
     public partial class frmBattle : Form
     {
-        private GameData gameData;
-        private List<string> player1Figures; // Positions player1
-        private List<string> player2Figures; // Positions player 2
-        private Button[,] player2Buttons;
-        private Button[,] player1Buttons;
+        private System.Windows.Forms.Timer gameTimer; // Timer 
+        private int elapsedTime; // Variable time in seconds
+        private Label lblTimer;
+        private GameData gameData; // Contains the data
+        private List<string> player1Figures;
+        private List<string> player2Figures;
+        private Button[,] player2Buttons; // Set of buttons representing the player 2 board
+        private Button[,] player1Buttons; //Set of buttons representing the player 1 board
         private bool isPlayer1Turn = true; // Turn
         private HashSet<string> player1AttackedPositions = new HashSet<string>();
         private HashSet<string> player2AttackedPositions = new HashSet<string>();
@@ -19,14 +22,34 @@ namespace battleShip
         public frmBattle(GameData gameData)
         {
             InitializeComponent();
-            this.gameData = gameData;
-            InitializeBattleBoards();
-            ShowPlayerBoard();
-
-            player1Figures = gameData.Player1Figures;
-            player2Figures = gameData.Player2Figures;
+            this.gameData = gameData; // Assign the game data
+            InitializeBattleBoards(); // Initialize game boards
+            ShowPlayerBoard(); // Display the appropriate player board
+            player1Figures = gameData.Player1Figures; // Place player 1's ship positions
+            player2Figures = gameData.Player2Figures; // Place player 2's ship positions
+            InitializeGameTimer(); // Initialize and start the game timer
         }
+        private void InitializeGameTimer()
+        {
+            // Configurar el temporizador
+            gameTimer = new System.Windows.Forms.Timer();
+            gameTimer.Interval = 1000; // 1 segundo
+            gameTimer.Tick += GameTimer_Tick; // Evento al pasar el intervalo
 
+            // Inicializar el tiempo transcurrido y el Label del temporizador
+            elapsedTime = 0;
+
+            lblTimer = new Label
+            {
+                Location = new Point(10, 10),
+                Size = new Size(100, 30),
+                Font = new Font("Arial", 12, FontStyle.Bold),
+                Text = "Time: 0s"
+            };
+
+            this.Controls.Add(lblTimer); // Añadir el label al formulario
+            gameTimer.Start(); // Iniciar el temporizador
+        }
         private void InitializeBattleBoards()
         {
             InitializeTableLayoutPanel(tableLayoutPanelPlayer1, out player1Buttons);
@@ -40,6 +63,16 @@ namespace battleShip
             panel.RowCount = 5;
             panel.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
             panel.AutoSize = true;
+
+            // Establecer estilos de fila y columna para que ocupen todo el espacio disponible
+            for (int i = 0; i < panel.ColumnCount; i++)
+            {
+                panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F)); // Cada columna ocupa el 20%
+            }
+            for (int i = 0; i < panel.RowCount; i++)
+            {
+                panel.RowStyles.Add(new RowStyle(SizeType.Percent, 20F)); // Cada fila ocupa el 20%
+            }
 
             string[] rows = { "A", "B", "C", "D", "E" };
             int[] columns = { 1, 2, 3, 4, 5 };
