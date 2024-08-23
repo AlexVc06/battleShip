@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             tableLayoutPanel1 = new TableLayoutPanel();
-            btnAcepted = new Button();
+            btnReady = new Button();
             lblNameUser1 = new Label();
             txtNameUser1 = new TextBox();
             lblUser1 = new Label();
@@ -52,21 +52,21 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
-            tableLayoutPanel1.Size = new Size(410, 410);
+            tableLayoutPanel1.Size = new Size(450, 450);
             tableLayoutPanel1.TabIndex = 0;
             // 
-            // btnAcepted
+            // btnReady
             // 
-            btnAcepted.BackColor = Color.DimGray;
-            btnAcepted.Font = new Font("Stencil", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnAcepted.ForeColor = Color.FromArgb(255, 128, 0);
-            btnAcepted.Location = new Point(788, 439);
-            btnAcepted.Name = "btnAcepted";
-            btnAcepted.Size = new Size(185, 66);
-            btnAcepted.TabIndex = 1;
-            btnAcepted.Text = "Acepted";
-            btnAcepted.UseVisualStyleBackColor = false;
-            btnAcepted.Click += btnAcepted_Click;
+            btnReady.BackColor = Color.DimGray;
+            btnReady.Font = new Font("Stencil", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnReady.ForeColor = Color.FromArgb(255, 128, 0);
+            btnReady.Location = new Point(822, 479);
+            btnReady.Name = "btnReady";
+            btnReady.Size = new Size(185, 66);
+            btnReady.TabIndex = 1;
+            btnReady.Text = "Listo";
+            btnReady.UseVisualStyleBackColor = false;
+            btnReady.Click += btnAcepted_Click;
             // 
             // lblNameUser1
             // 
@@ -74,19 +74,20 @@
             lblNameUser1.BackColor = Color.Transparent;
             lblNameUser1.Font = new Font("Stencil", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblNameUser1.ForeColor = Color.FromArgb(255, 128, 0);
-            lblNameUser1.Location = new Point(36, 95);
+            lblNameUser1.Location = new Point(12, 95);
             lblNameUser1.Name = "lblNameUser1";
-            lblNameUser1.Size = new Size(74, 24);
+            lblNameUser1.Size = new Size(104, 24);
             lblNameUser1.TabIndex = 2;
-            lblNameUser1.Text = "Name:";
+            lblNameUser1.Text = "Nombre:";
             // 
             // txtNameUser1
             // 
             txtNameUser1.BackColor = Color.DarkGray;
-            txtNameUser1.Location = new Point(110, 95);
+            txtNameUser1.Location = new Point(122, 95);
             txtNameUser1.Name = "txtNameUser1";
-            txtNameUser1.Size = new Size(170, 27);
+            txtNameUser1.Size = new Size(158, 27);
             txtNameUser1.TabIndex = 3;
+            txtNameUser1.KeyPress += txtNameUser1_KeyPress;
             // 
             // lblUser1
             // 
@@ -95,9 +96,9 @@
             lblUser1.Font = new Font("Algerian", 19.8000011F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblUser1.Location = new Point(457, 25);
             lblUser1.Name = "lblUser1";
-            lblUser1.Size = new Size(135, 38);
+            lblUser1.Size = new Size(195, 38);
             lblUser1.TabIndex = 4;
-            lblUser1.Text = "User 1";
+            lblUser1.Text = "Usuario 1";
             // 
             // frmPreparation
             // 
@@ -105,16 +106,17 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackgroundImage = Properties.Resources.portadabattle;
             BackgroundImageLayout = ImageLayout.Stretch;
-            ClientSize = new Size(1063, 577);
+            ClientSize = new Size(1063, 653);
             Controls.Add(lblUser1);
             Controls.Add(txtNameUser1);
             Controls.Add(lblNameUser1);
-            Controls.Add(btnAcepted);
+            Controls.Add(btnReady);
             Controls.Add(tableLayoutPanel1);
+            MaximizeBox = false;
             Name = "frmPreparation";
             ShowIcon = false;
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Preparation";
+            Text = "Registro jugador 1";
             ResumeLayout(false);
             PerformLayout();
         }
@@ -122,7 +124,7 @@
         #endregion
 
         private TableLayoutPanel tableLayoutPanel1;
-        private Button btnAcepted;
+        private Button btnReady;
         private Label lblNameUser1;
         private TextBox txtNameUser1;
         private Label lblUser1;

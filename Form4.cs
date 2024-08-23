@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -14,7 +13,7 @@ namespace battleShip
         private List<string> player1Figures;
         private List<string> player2Figures;
         private Button[,] player2Buttons; // Set of buttons representing the player 2 board
-        private Button[,] player1Buttons; //Set of buttons representing the player 1 board
+        private Button[,] player1Buttons; // Set of buttons representing the player 1 board
         private bool isPlayer1Turn = true; // Turn
         private HashSet<string> player1AttackedPositions = new HashSet<string>();
         private HashSet<string> player2AttackedPositions = new HashSet<string>();
@@ -29,56 +28,54 @@ namespace battleShip
             player2Figures = gameData.Player2Figures; // Place player 2's ship positions
             InitializeGameTimer(); // Initialize and start the game timer
         }
+
+        #region Methods
         private void InitializeGameTimer()
         {
-            // Configurar el temporizador
-            gameTimer = new System.Windows.Forms.Timer();
-            gameTimer.Interval = 1000; // 1 segundo
-            gameTimer.Tick += GameTimer_Tick; // Evento al pasar el intervalo
-
-            // Inicializar el tiempo transcurrido y el Label del temporizador
+            // Set up the game timer
+            gameTimer = new System.Windows.Forms.Timer
+            {
+                Interval = 1000 // Timer interval set to 1 second
+            };
+            gameTimer.Tick += GameTimer_Tick;
+            // Initialize the elapsed time and the timer label
             elapsedTime = 0;
-
             lblTimer = new Label
             {
+                BackColor = Color.Transparent,
                 Location = new Point(10, 10),
                 Size = new Size(100, 30),
-                Font = new Font("Arial", 12, FontStyle.Bold),
-                Text = "Time: 0s"
+                Font = new Font("Algerian", 12, FontStyle.Bold),
+                Text = "Tiempo: 0s"
             };
-
-            this.Controls.Add(lblTimer); // Añadir el label al formulario
-            gameTimer.Start(); // Iniciar el temporizador
+            this.Controls.Add(lblTimer);
+            gameTimer.Start();
         }
         private void InitializeBattleBoards()
         {
+            // Set up the battle boards for both players
             InitializeTableLayoutPanel(tableLayoutPanelPlayer1, out player1Buttons);
             InitializeTableLayoutPanel(tableLayoutPanelPlayer2, out player2Buttons);
-            tableLayoutPanelPlayer1.Visible = false; // Ocult player 1 table at start
+            tableLayoutPanelPlayer1.Visible = false; // Hide player 1's board at the start
         }
-
         private void InitializeTableLayoutPanel(TableLayoutPanel panel, out Button[,] buttons)
         {
             panel.ColumnCount = 5;
             panel.RowCount = 5;
             panel.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
-            panel.AutoSize = true;
-
-            // Establecer estilos de fila y columna para que ocupen todo el espacio disponible
+            // Set column and row styles to fill the panel space evenly
             for (int i = 0; i < panel.ColumnCount; i++)
             {
-                panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F)); // Cada columna ocupa el 20%
+                panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F)); // 20% width for each column
             }
             for (int i = 0; i < panel.RowCount; i++)
             {
-                panel.RowStyles.Add(new RowStyle(SizeType.Percent, 20F)); // Cada fila ocupa el 20%
+                panel.RowStyles.Add(new RowStyle(SizeType.Percent, 20F)); // 20% height for each row
             }
-
             string[] rows = { "A", "B", "C", "D", "E" };
             int[] columns = { 1, 2, 3, 4, 5 };
-
             panel.Controls.Clear();
-            buttons = new Button[rows.Length, columns.Length];
+            buttons = new Button[rows.Length, columns.Length]; // Create the button array
             for (int i = 0; i < rows.Length; i++)
             {
                 for (int j = 0; j < columns.Length; j++)
@@ -86,128 +83,129 @@ namespace battleShip
                     Button button = new Button
                     {
                         Text = $"{rows[i]}{columns[j]}",
-                        Size = new Size(60, 60),
-                        BackColor = Color.LightGray
+                        BackColor = Color.LightGray,
+                        Dock = DockStyle.Fill,
+                        Margin = new Padding(0)
                     };
-                    panel.Controls.Add(button, j, i);
-                    buttons[i, j] = button;
+                    panel.Controls.Add(button, j, i); // Add button to panel
+                    buttons[i, j] = button; // Store button in the array
                 }
             }
-        }
-
-        private void btnAttack_Click(object sender, EventArgs e)
-        {
-            string position = txtPosition.Text.Trim().ToUpper();
-            if (string.IsNullOrEmpty(position))
-            {
-                MessageBox.Show("Please enter a position to attack.");
-                return;
-            }
-            if (!IsValidPosition(position))
-            {
-                MessageBox.Show("Invalid position.");
-                return;
-            }
-
-           
-            if (isPlayer1Turn && player1AttackedPositions.Contains(position))
-            {
-                MessageBox.Show("Player 1 already attacked this position.");
-                return;
-            }
-            else if (!isPlayer1Turn && player2AttackedPositions.Contains(position))
-            {
-                MessageBox.Show("Player 2 already attacked this position.");
-                return;
-            }
-
-           
-            if (isPlayer1Turn)
-            {
-                player1AttackedPositions.Add(position);
-            }
-            else
-            {
-                player2AttackedPositions.Add(position);
-            }
-
-            bool bang = false;
-            if (isPlayer1Turn)
-            {
-                bang = AttackPosition(position, player2Buttons, player2Figures);
-            }
-            else
-            {
-                bang = AttackPosition(position, player1Buttons, player1Figures);
-            }
-
-            txtPosition.Text = "";
-            if (!bang)
-            {
-                isPlayer1Turn = !isPlayer1Turn;
-            }
-            ShowPlayerBoard();
         }
         private void ShowPlayerBoard()
         {
             if (isPlayer1Turn)
             {
-                // Show player 2 table
                 tableLayoutPanelPlayer2.Visible = true;
                 tableLayoutPanelPlayer1.Visible = false;
-
-                // Show name player 1
-                lblTurno.Text = $"{gameData.Player1Name}'s turn";
+                lblTurno.Text = $"Turno de {gameData.Player1Name} para atacar";
             }
             else
             {
-                // Show player 1 table
                 tableLayoutPanelPlayer1.Visible = true;
                 tableLayoutPanelPlayer2.Visible = false;
-
-                //  Show name player 2
-                lblTurno.Text = $"{gameData.Player2Name}'s turn";
+                lblTurno.Text = $"Turno de {gameData.Player2Name} para atacar";
             }
         }
-
         private bool AttackPosition(string position, Button[,] buttons, List<string> figures)
         {
-            int row = position[0] - 'A'; 
-            int column = int.Parse(position.Substring(1)) - 1;
-
-            if (row >= 0 && row < 5 && column >= 0 && column < 5)
+            int row = position[0] - 'A'; // Convert row letter to index
+            int column = int.Parse(position.Substring(1)) - 1; // Convert column number to index
+            if (row >= 0 && row < 5 && column >= 0 && column < 5) // Check if the position is within limits
             {
-                Button button = buttons[row, column];
+                Button button = buttons[row, column]; // Get the button at the specified position
                 if (figures.Contains(position))
                 {
-                    button.BackColor = Color.Red; // Mark as impacted
-                    figures.Remove(position); // Delete impacted position
+                    button.BackColor = Color.Yellow;
+                    figures.Remove(position);
                     return true;
                 }
                 else
                 {
-                    button.BackColor = Color.Blue; // Mark failed
+                    button.BackColor = Color.Red;
                     return false;
                 }
             }
             else
             {
-                MessageBox.Show("Position out of range.");
+                MessageBox.Show("Posición fuera de rango.");
                 return false;
             }
         }
-
         private bool IsValidPosition(string position)
         {
             if (position.Length < 2) return false;
             char row = position[0];
             string columnStr = position.Substring(1);
-            return (row >= 'A' && row <= 'E') && int.TryParse(columnStr, out int column) && column >= 1 && column <= 5;
+            return (row >= 'A' && row <= 'E') && int.TryParse(columnStr, out int column) && column >= 1 && column <= 5; // Validate position
         }
+        private bool CheckVictory()
+        {
+            return player2Figures.Count == 0 || player1Figures.Count == 0;
+        }
+        #endregion
 
+        #region Events
+        private void GameTimer_Tick(object sender, EventArgs e)
+        {
+            elapsedTime++; // Increment the elapsed time
+            lblTimer.Text = $"Tiempo: {elapsedTime} s"; // Update the timer label text
+        }
+        private void btnAttack_Click(object sender, EventArgs e)
+        {
+            bool bang = false;
+            string position = txtPosition.Text.Trim().ToUpper(); // Get and format the attack position
+            if (string.IsNullOrEmpty(position))
+            {
+                MessageBox.Show("Por favor ingrese una posición para atacar.");
+                return;
+            }
+            if (!IsValidPosition(position))
+            {
+                MessageBox.Show("Posición inválida.");
+                return;
+            }
+            if (isPlayer1Turn && player1AttackedPositions.Contains(position))
+            {
+                MessageBox.Show("El jugador 1 ya atacó esta posición.");
+                return;
+            }
+            else if (!isPlayer1Turn && player2AttackedPositions.Contains(position))
+            {
+                MessageBox.Show("El jugador 2 ya atacó esta posición.");
+                return;
+            }
+            if (isPlayer1Turn)
+            {
+                player1AttackedPositions.Add(position); // Record the attack position for player 1
+                bang = AttackPosition(position, player2Buttons, player2Figures); // Attack player 2's board
+            }
+            else
+            {
+                player2AttackedPositions.Add(position); // Record the attack position for player 2
+                bang = AttackPosition(position, player1Buttons, player1Figures); // Attack player 1's board
+            }
+            txtPosition.Text = ""; // Clear the input field
+            if (CheckVictory())
+            {
+                gameTimer.Stop(); // Stop the game timer
+                // Display the winner and the elapsed time
+                string winnerName = isPlayer1Turn ? gameData.Player1Name : gameData.Player2Name;
+                MessageBox.Show($"El jugador {winnerName} ha ganado en {elapsedTime} segundos!");
+                btnAttack.Enabled = false; // Disable the attack button after victory
+                return;
+            }
+            if (!bang)
+            {
+                isPlayer1Turn = !isPlayer1Turn; // Change turn if there is no hit
+            }
+
+            ShowPlayerBoard(); // Update the displayed board
+        }
         private void frmBattle_FormClosed(object sender, FormClosedEventArgs e)
         {
-            this.Close();
+            this.Close(); // Close the form
         }
+        #endregion
     }
 }

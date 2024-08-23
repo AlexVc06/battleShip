@@ -49,11 +49,11 @@
             btnOpen.BackColor = Color.DimGray;
             btnOpen.Font = new Font("Stencil", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnOpen.ForeColor = Color.FromArgb(255, 128, 0);
-            btnOpen.Location = new Point(460, 452);
+            btnOpen.Location = new Point(452, 505);
             btnOpen.Name = "btnOpen";
-            btnOpen.Size = new Size(142, 52);
+            btnOpen.Size = new Size(160, 65);
             btnOpen.TabIndex = 1;
-            btnOpen.Text = "Open Game";
+            btnOpen.Text = "Iniciar Juego";
             btnOpen.UseVisualStyleBackColor = false;
             btnOpen.Click += btnNext_Click;
             // 
@@ -63,9 +63,10 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackgroundImage = Properties.Resources.portadabattle;
             BackgroundImageLayout = ImageLayout.Stretch;
-            ClientSize = new Size(1063, 577);
+            ClientSize = new Size(1063, 653);
             Controls.Add(btnOpen);
             Controls.Add(lblMessageWelcome);
+            MaximizeBox = false;
             Name = "FrmWelcome";
             ShowIcon = false;
             StartPosition = FormStartPosition.CenterScreen;
