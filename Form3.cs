@@ -17,6 +17,9 @@ namespace battleShip
             InitializeComponent();
             InitializeTableLayoutPanel();
             this.gameData = gameData;
+            // Asociar el evento KeyDown del formulario o del TextBox al método para simular el clic
+            this.KeyPreview = true; // Permite que el formulario detecte las teclas presionadas
+            this.KeyDown += new KeyEventHandler(frmPreparation2_KeyDown); // Asocia el evento KeyDown
         }
 
         #region Methods
@@ -257,7 +260,17 @@ namespace battleShip
                 e.Handled = true;
             }
         }
+        private void frmPreparation2_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter) // Si el usuario presiona Enter
+            {
+                btnStartGame_Click(this, new EventArgs()); // Simula el clic en el botón de iniciar juego
+                e.SuppressKeyPress = true; // Evita que el sonido de 'ding' se reproduzca al presionar Enter
+            }
+        }
 
         #endregion
+
+
     }
 }

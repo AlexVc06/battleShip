@@ -67,6 +67,7 @@
             btnStartGame.Text = "Iniciar juego";
             btnStartGame.UseVisualStyleBackColor = false;
             btnStartGame.Click += btnStartGame_Click;
+         
             // 
             // lblNameUser2
             // 

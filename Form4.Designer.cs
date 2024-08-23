@@ -35,6 +35,8 @@
             btnAttack = new Button();
             lblTurno = new Label();
             GameTimer = new System.Windows.Forms.Timer(components);
+            btnPlayAgain = new Button();
+            btnExitGame = new Button();
             SuspendLayout();
             // 
             // tableLayoutPanelPlayer1
@@ -88,6 +90,7 @@
             txtPosition.Name = "txtPosition";
             txtPosition.Size = new Size(106, 43);
             txtPosition.TabIndex = 2;
+         
             // 
             // btnAttack
             // 
@@ -118,12 +121,32 @@
             // 
             GameTimer.Tick += GameTimer_Tick;
             // 
+            // btnPlayAgain
+            // 
+            btnPlayAgain.Location = new Point(890, 576);
+            btnPlayAgain.Name = "btnPlayAgain";
+            btnPlayAgain.Size = new Size(148, 47);
+            btnPlayAgain.TabIndex = 5;
+            btnPlayAgain.Text = "Jugar otra vez";
+            btnPlayAgain.UseVisualStyleBackColor = true;
+            // 
+            // btnExitGame
+            // 
+            btnExitGame.Location = new Point(26, 587);
+            btnExitGame.Name = "btnExitGame";
+            btnExitGame.Size = new Size(117, 48);
+            btnExitGame.TabIndex = 6;
+            btnExitGame.Text = "Salir";
+            btnExitGame.UseVisualStyleBackColor = true;
+            // 
             // frmBattle
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackgroundImage = Properties.Resources.ImagenPri;
             ClientSize = new Size(1063, 653);
+            Controls.Add(btnExitGame);
+            Controls.Add(btnPlayAgain);
             Controls.Add(tableLayoutPanelPlayer2);
             Controls.Add(lblTurno);
             Controls.Add(btnAttack);
@@ -135,7 +158,7 @@
             ShowIcon = false;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Battle";
-            FormClosed += frmBattle_FormClosed;
+           
             ResumeLayout(false);
             PerformLayout();
         }
@@ -148,5 +171,7 @@
         private System.Windows.Forms.Button btnAttack;
         private System.Windows.Forms.Label lblTurno;
         private System.Windows.Forms.Timer GameTimer;
+        private Button btnPlayAgain;
+        private Button btnExitGame;
     }
 }

@@ -15,20 +15,21 @@ namespace battleShip
         private Button[,] player2Buttons; // Set of buttons representing the player 2 board
         private Button[,] player1Buttons; // Set of buttons representing the player 1 board
         private bool isPlayer1Turn = true; // Turn
-        private HashSet<string> player1AttackedPositions = new HashSet<string>();
-        private HashSet<string> player2AttackedPositions = new HashSet<string>();
+        private HashSet<string> player1AttackedPositions = new HashSet<string>(); //Does not perform duplicate attacks
+        private HashSet<string> player2AttackedPositions = new HashSet<string>(); //Ddoes not perform duplicate attacks
 
         public frmBattle(GameData gameData)
         {
             InitializeComponent();
             this.gameData = gameData; // Assign the game data
             InitializeBattleBoards(); // Initialize game boards
-            ShowPlayerBoard(); // Display the appropriate player board
+            ShowPlayerBoard(); // Show the appropriate player board
             player1Figures = gameData.Player1Figures; // Place player 1's ship positions
             player2Figures = gameData.Player2Figures; // Place player 2's ship positions
             InitializeGameTimer(); // Initialize and start the game timer
+            this.txtPosition.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtPosition_KeyDown);
+            InitializeExitAndPlayAgainButtons();
         }
-
         #region Methods
         private void InitializeGameTimer()
         {
@@ -139,9 +140,30 @@ namespace battleShip
             string columnStr = position.Substring(1);
             return (row >= 'A' && row <= 'E') && int.TryParse(columnStr, out int column) && column >= 1 && column <= 5; // Validate position
         }
-        private bool CheckVictory()
+        private void InitializeExitAndPlayAgainButtons()
         {
-            return player2Figures.Count == 0 || player1Figures.Count == 0;
+            btnExitGame.Click += (sender, e) => Application.Exit();
+            this.Controls.Add(btnExitGame);
+            btnPlayAgain.Click += btnplayAgain_Click;
+            this.Controls.Add(btnPlayAgain);
+        }
+        private void btnplayAgain_Click(object sender, EventArgs e)
+        {
+            // Cierra el formulario actual y reinicia la aplicación
+            this.Close();
+            Application.Restart();
+        }
+        private void DisableGameControls()
+        {
+            // Disable the attack button
+            btnAttack.Enabled = false;
+
+            // Disable the text box
+            txtPosition.Enabled = false;
+
+            // Disable the table layouts
+            tableLayoutPanelPlayer1.Enabled = false;
+            tableLayoutPanelPlayer2.Enabled = false;
         }
         #endregion
 
@@ -150,6 +172,11 @@ namespace battleShip
         {
             elapsedTime++; // Increment the elapsed time
             lblTimer.Text = $"Tiempo: {elapsedTime} s"; // Update the timer label text
+        }
+
+        private bool CheckVictory()
+        {
+            return player2Figures.Count == 0 || player1Figures.Count == 0;
         }
         private void btnAttack_Click(object sender, EventArgs e)
         {
@@ -189,18 +216,33 @@ namespace battleShip
             if (CheckVictory())
             {
                 gameTimer.Stop(); // Stop the game timer
-                // Display the winner and the elapsed time
                 string winnerName = isPlayer1Turn ? gameData.Player1Name : gameData.Player2Name;
                 MessageBox.Show($"El jugador {winnerName} ha ganado en {elapsedTime} segundos!");
-                btnAttack.Enabled = false; // Disable the attack button after victory
+                DisableGameControls(); // Call method to disable game controls
                 return;
             }
             if (!bang)
             {
                 isPlayer1Turn = !isPlayer1Turn; // Change turn if there is no hit
             }
-
             ShowPlayerBoard(); // Update the displayed board
+        }
+        private void txtPosition_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                string position = txtPosition.Text.Trim().ToUpper(); // Get and format attack position
+
+                if (!string.IsNullOrEmpty(position))
+                {
+                    btnAttack_Click(this, new EventArgs());
+                    e.SuppressKeyPress = true; // Avoid the 'ding' sound
+                }
+                else
+                {
+                    e.SuppressKeyPress = true; // Avoid 'ding' sound even if empty
+                }
+            }
         }
         private void frmBattle_FormClosed(object sender, FormClosedEventArgs e)
         {

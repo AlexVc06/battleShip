@@ -117,6 +117,7 @@
             ShowIcon = false;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Registro jugador 1";
+            KeyDown += frmPreparation_KeyDown;
             ResumeLayout(false);
             PerformLayout();
         }
