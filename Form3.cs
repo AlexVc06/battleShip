@@ -47,6 +47,7 @@ namespace battleShip
                 }
             }
         }
+
         void ShowSilhouette(int initialColumn, int initialRow, Color color, int length, bool isLShape = false)
         {
             Clear_silhouette();
@@ -72,6 +73,7 @@ namespace battleShip
                 }
             }
         }
+
         void Clear_silhouette()
         {
             for (int i = 0; i < buttons.GetLength(0); i++)
@@ -85,6 +87,7 @@ namespace battleShip
                 }
             }
         }
+
         private bool AddFigure4Buttons(int initialColumn, int initialRow)
         {
             if (initialRow + 3 >= 5 || !CheckAvailableSpace(initialRow, initialColumn, 4)) return false;
@@ -99,6 +102,7 @@ namespace battleShip
             }
             return true;
         }
+
         private bool AddFigure_L(int initialColumn, int initialRow)
         {
             if (initialRow + 1 >= 5 || initialColumn + 1 >= 5 || !CheckAvailableSpaceL(initialRow, initialColumn)) return false;
@@ -119,6 +123,7 @@ namespace battleShip
 
             return true;
         }
+
         private bool AddFigure2Buttons(int initialColumn, int initialRow)
         {
             if (initialRow + 1 >= 5 || !CheckAvailableSpace(initialRow, initialColumn, 2)) return false;
@@ -133,6 +138,7 @@ namespace battleShip
             }
             return true;
         }
+
         private bool CheckAvailableSpace(int initialRow, int initialColumn, int length)
         {
             if (initialRow + length - 1 >= 5) return false;
@@ -142,6 +148,7 @@ namespace battleShip
             }
             return true;
         }
+
         private bool CheckAvailableSpaceL(int initialRow, int initialColumn)
         {
             if (initialRow + 1 >= 5 || initialColumn + 1 >= 5) return false;
@@ -153,6 +160,7 @@ namespace battleShip
             }
             return true;
         }
+
         #endregion
 
         #region Events
@@ -183,6 +191,7 @@ namespace battleShip
                 }
             }
         }
+
         private void Button_MouseEnter(object sender, EventArgs e)
         {
             if (!placeFigure) return;
@@ -210,11 +219,13 @@ namespace battleShip
                 }
             }
         }
+
         private void Button_MouseLeave(object sender, EventArgs e)
         {
             if (!placeFigure) return;
             Clear_silhouette();
         }
+
         private void btnStartGame_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtNameUser2.Text))
