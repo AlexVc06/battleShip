@@ -93,8 +93,8 @@
             // 
             // btnAttack
             // 
-            btnAttack.BackColor = Color.DarkGray;
-            btnAttack.Font = new Font("Sylfaen", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnAttack.BackColor = Color.FromArgb(255, 128, 0);
+            btnAttack.Font = new Font("Sylfaen", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnAttack.ForeColor = Color.Black;
             btnAttack.Location = new Point(564, 21);
             btnAttack.Margin = new Padding(3, 4, 3, 4);
@@ -160,7 +160,7 @@
             Name = "frmBattle";
             ShowIcon = false;
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Battle";
+            Text = "Batalla";
             ResumeLayout(false);
             PerformLayout();
         }
