@@ -14,10 +14,9 @@ namespace battleShip
         private List<string> player2Figures;
         private Button[,] player2Buttons; // Set of buttons representing the player 2 board
         private Button[,] player1Buttons; // Set of buttons representing the player 1 board
-        private bool isPlayer1Turn = true; // Turn
-        private HashSet<string> player1AttackedPositions = new HashSet<string>(); //Does not perform duplicate attacks
-        private HashSet<string> player2AttackedPositions = new HashSet<string>(); //Ddoes not perform duplicate attacks
-
+        private bool player1Turn = true; // Turn
+        private HashSet<string> player1AttackedPositions = new HashSet<string>(); // Avoid duplicate attacks
+        private HashSet<string> player2AttackedPositions = new HashSet<string>(); // Avoid duplicate attacks
         public frmBattle(GameData gameData)
         {
             InitializeComponent();
@@ -39,13 +38,12 @@ namespace battleShip
                 Interval = 1000 // Timer interval set to 1 second
             };
             gameTimer.Tick += GameTimer_Tick;
-            // Initialize the elapsed time and the timer label
             elapsedTime = 0;
             lblTimer = new Label
             {
                 BackColor = Color.Transparent,
-                Location = new Point(10, 10),
-                Size = new Size(100, 30),
+                Location = new Point(15, 10),
+                Size = new Size(150, 30),
                 Font = new Font("Algerian", 12, FontStyle.Bold),
                 Text = "Tiempo: 0s"
             };
@@ -64,7 +62,6 @@ namespace battleShip
             panel.ColumnCount = 5;
             panel.RowCount = 5;
             panel.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
-            // Set column and row styles to fill the panel space evenly
             for (int i = 0; i < panel.ColumnCount; i++)
             {
                 panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F)); // 20% width for each column
@@ -95,17 +92,23 @@ namespace battleShip
         }
         private void ShowPlayerBoard()
         {
-            if (isPlayer1Turn)
+            if (player1Turn)
             {
                 tableLayoutPanelPlayer2.Visible = true;
                 tableLayoutPanelPlayer1.Visible = false;
                 lblTurno.Text = $"Turno de {gameData.Player1Name} para atacar";
+
+                lblTurno.Location = new Point(20, lblTurno.Location.Y); 
+                lblTurno.TextAlign = ContentAlignment.MiddleLeft; //Align text to the left
             }
             else
             {
                 tableLayoutPanelPlayer1.Visible = true;
                 tableLayoutPanelPlayer2.Visible = false;
                 lblTurno.Text = $"Turno de {gameData.Player2Name} para atacar";
+
+                lblTurno.Location = new Point(this.ClientSize.Width - lblTurno.Width - 20, lblTurno.Location.Y);
+                lblTurno.TextAlign = ContentAlignment.MiddleRight; // Align text to the right
             }
         }
         private bool AttackPosition(string position, Button[,] buttons, List<string> figures)
@@ -149,19 +152,14 @@ namespace battleShip
         }
         private void btnplayAgain_Click(object sender, EventArgs e)
         {
-            // Cierra el formulario actual y reinicia la aplicación
             this.Close();
-            Application.Restart();
+            Application.Restart(); // Restart the application
         }
         private void DisableGameControls()
         {
-            // Disable the attack button
+            // Disable the attack button, text box, and table layouts
             btnAttack.Enabled = false;
-
-            // Disable the text box
             txtPosition.Enabled = false;
-
-            // Disable the table layouts
             tableLayoutPanelPlayer1.Enabled = false;
             tableLayoutPanelPlayer2.Enabled = false;
         }
@@ -170,10 +168,11 @@ namespace battleShip
         #region Events
         private void GameTimer_Tick(object sender, EventArgs e)
         {
-            elapsedTime++; // Increment the elapsed time
-            lblTimer.Text = $"Tiempo: {elapsedTime} s"; // Update the timer label text
+            elapsedTime++; // Increase elapsed time in seconds
+            int minutes = elapsedTime / 60; // Calculate minutes
+            int seconds = elapsedTime % 60; // Calculate remaining seconds
+            lblTimer.Text = $"Tiempo: {minutes}:{seconds}s"; // Update timer label
         }
-
         private bool CheckVictory()
         {
             return player2Figures.Count == 0 || player1Figures.Count == 0;
@@ -192,17 +191,17 @@ namespace battleShip
                 MessageBox.Show("Posición inválida.");
                 return;
             }
-            if (isPlayer1Turn && player1AttackedPositions.Contains(position))
+            if (player1Turn && player1AttackedPositions.Contains(position))
             {
                 MessageBox.Show("El jugador 1 ya atacó esta posición.");
                 return;
             }
-            else if (!isPlayer1Turn && player2AttackedPositions.Contains(position))
+            else if (!player1Turn && player2AttackedPositions.Contains(position))
             {
                 MessageBox.Show("El jugador 2 ya atacó esta posición.");
                 return;
             }
-            if (isPlayer1Turn)
+            if (player1Turn)
             {
                 player1AttackedPositions.Add(position); // Record the attack position for player 1
                 bang = AttackPosition(position, player2Buttons, player2Figures); // Attack player 2's board
@@ -216,14 +215,16 @@ namespace battleShip
             if (CheckVictory())
             {
                 gameTimer.Stop(); // Stop the game timer
-                string winnerName = isPlayer1Turn ? gameData.Player1Name : gameData.Player2Name;
-                MessageBox.Show($"El jugador {winnerName} ha ganado en {elapsedTime} segundos!");
-                DisableGameControls(); // Call method to disable game controls
+                int minutes = elapsedTime / 60; // Calculate minutes
+                int seconds = elapsedTime % 60; // Calculate seconds
+                string winnerName = player1Turn ? gameData.Player1Name : gameData.Player2Name;
+                MessageBox.Show($"El jugador {winnerName} ha ganado en {minutes} minutos y {seconds} segundos!");
+                DisableGameControls(); // Disable game controls
                 return;
             }
             if (!bang)
             {
-                isPlayer1Turn = !isPlayer1Turn; // Change turn if there is no hit
+                player1Turn = !player1Turn; // Change turn if there is no hit
             }
             ShowPlayerBoard(); // Update the displayed board
         }

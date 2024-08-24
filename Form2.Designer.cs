@@ -66,7 +66,7 @@
             btnReady.TabIndex = 1;
             btnReady.Text = "Listo";
             btnReady.UseVisualStyleBackColor = false;
-            btnReady.Click += btnAcepted_Click;
+            btnReady.Click += btnReady_Click;
             // 
             // lblNameUser1
             // 
@@ -117,7 +117,7 @@
             ShowIcon = false;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Registro jugador 1";
-            KeyDown += frmPreparation_KeyDown;
+           
             ResumeLayout(false);
             PerformLayout();
         }

@@ -90,7 +90,6 @@
             txtPosition.Name = "txtPosition";
             txtPosition.Size = new Size(106, 43);
             txtPosition.TabIndex = 2;
-         
             // 
             // btnAttack
             // 
@@ -123,21 +122,25 @@
             // 
             // btnPlayAgain
             // 
+            btnPlayAgain.BackColor = Color.FromArgb(0, 192, 192);
+            btnPlayAgain.Font = new Font("Segoe UI", 10.2F, FontStyle.Italic, GraphicsUnit.Point, 0);
             btnPlayAgain.Location = new Point(890, 576);
             btnPlayAgain.Name = "btnPlayAgain";
             btnPlayAgain.Size = new Size(148, 47);
             btnPlayAgain.TabIndex = 5;
             btnPlayAgain.Text = "Jugar otra vez";
-            btnPlayAgain.UseVisualStyleBackColor = true;
+            btnPlayAgain.UseVisualStyleBackColor = false;
             // 
             // btnExitGame
             // 
-            btnExitGame.Location = new Point(26, 587);
+            btnExitGame.BackColor = Color.Red;
+            btnExitGame.Font = new Font("Segoe UI", 10.2F, FontStyle.Italic, GraphicsUnit.Point, 0);
+            btnExitGame.Location = new Point(24, 575);
             btnExitGame.Name = "btnExitGame";
             btnExitGame.Size = new Size(117, 48);
             btnExitGame.TabIndex = 6;
             btnExitGame.Text = "Salir";
-            btnExitGame.UseVisualStyleBackColor = true;
+            btnExitGame.UseVisualStyleBackColor = false;
             // 
             // frmBattle
             // 
@@ -158,7 +161,6 @@
             ShowIcon = false;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Battle";
-           
             ResumeLayout(false);
             PerformLayout();
         }

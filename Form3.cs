@@ -11,29 +11,25 @@ namespace battleShip
         private Button[,] buttons;
         private int figurePresent = 0;
         private bool placeFigure = true;
-
         public frmPreparation2(GameData gameData)
         {
             InitializeComponent();
             InitializeTableLayoutPanel();
             this.gameData = gameData;
-            // Asociar el evento KeyDown del formulario o del TextBox al método para simular el clic
-            this.KeyPreview = true; // Permite que el formulario detecte las teclas presionadas
-            this.KeyDown += new KeyEventHandler(frmPreparation2_KeyDown); // Asocia el evento KeyDown
+            this.KeyPreview = true;
+            this.KeyDown += new KeyEventHandler(frmPreparation2_KeyDown);
         }
-
         #region Methods
 
         private void InitializeTableLayoutPanel()
         {
+            //This is to place the buttons, with their name and table events
             string[] rows = { "A", "B", "C", "D", "E" };
             int[] columns = { 1, 2, 3, 4, 5 };
             buttons = new Button[rows.Length, columns.Length];
             tableLayoutPanel2.RowCount = rows.Length;
             tableLayoutPanel2.ColumnCount = columns.Length;
-
             tableLayoutPanel2.Controls.Clear();
-
             for (int i = 0; i < rows.Length; i++)
             {
                 for (int j = 0; j < columns.Length; j++)
@@ -51,7 +47,6 @@ namespace battleShip
                 }
             }
         }
-
         void ShowSilhouette(int initialColumn, int initialRow, Color color, int length, bool isLShape = false)
         {
             Clear_silhouette();
@@ -77,7 +72,6 @@ namespace battleShip
                 }
             }
         }
-
         void Clear_silhouette()
         {
             for (int i = 0; i < buttons.GetLength(0); i++)
@@ -91,7 +85,6 @@ namespace battleShip
                 }
             }
         }
-
         private bool AddFigure4Buttons(int initialColumn, int initialRow)
         {
             if (initialRow + 3 >= 5 || !CheckAvailableSpace(initialRow, initialColumn, 4)) return false;
@@ -106,7 +99,6 @@ namespace battleShip
             }
             return true;
         }
-
         private bool AddFigure_L(int initialColumn, int initialRow)
         {
             if (initialRow + 1 >= 5 || initialColumn + 1 >= 5 || !CheckAvailableSpaceL(initialRow, initialColumn)) return false;
@@ -127,7 +119,6 @@ namespace battleShip
 
             return true;
         }
-
         private bool AddFigure2Buttons(int initialColumn, int initialRow)
         {
             if (initialRow + 1 >= 5 || !CheckAvailableSpace(initialRow, initialColumn, 2)) return false;
@@ -142,7 +133,6 @@ namespace battleShip
             }
             return true;
         }
-
         private bool CheckAvailableSpace(int initialRow, int initialColumn, int length)
         {
             if (initialRow + length - 1 >= 5) return false;
@@ -152,7 +142,6 @@ namespace battleShip
             }
             return true;
         }
-
         private bool CheckAvailableSpaceL(int initialRow, int initialColumn)
         {
             if (initialRow + 1 >= 5 || initialColumn + 1 >= 5) return false;
@@ -164,11 +153,9 @@ namespace battleShip
             }
             return true;
         }
-
         #endregion
 
         #region Events
-
         private void Button_Click(object sender, EventArgs e)
         {
             if (!placeFigure) return;
@@ -196,16 +183,15 @@ namespace battleShip
                 }
             }
         }
-
         private void Button_MouseEnter(object sender, EventArgs e)
         {
             if (!placeFigure) return;
-            Button botonSeleccionado = sender as Button;
+            Button buttonSelect = sender as Button;
             for (int i = 0; i < buttons.GetLength(0); i++)
             {
                 for (int j = 0; j < buttons.GetLength(1); j++)
                 {
-                    if (buttons[i, j] == botonSeleccionado)
+                    if (buttons[i, j] == buttonSelect)
                     {
                         if (figurePresent == 0)
                         {
@@ -224,13 +210,11 @@ namespace battleShip
                 }
             }
         }
-
         private void Button_MouseLeave(object sender, EventArgs e)
         {
             if (!placeFigure) return;
             Clear_silhouette();
         }
-
         private void btnStartGame_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtNameUser2.Text))
@@ -253,7 +237,7 @@ namespace battleShip
             }
         }
 
-        private void txtNameUser2_KeyPress(object sender, KeyPressEventArgs e)
+        private void txtNameUser2_KeyPress(object sender, KeyPressEventArgs e)//Only allow input letters
         {
             if (!char.IsLetter(e.KeyChar) && e.KeyChar != (char)Keys.Back)
             {
@@ -262,13 +246,12 @@ namespace battleShip
         }
         private void frmPreparation2_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter) // Si el usuario presiona Enter
+            if (e.KeyCode == Keys.Enter)
             {
-                btnStartGame_Click(this, new EventArgs()); // Simula el clic en el botón de iniciar juego
-                e.SuppressKeyPress = true; // Evita que el sonido de 'ding' se reproduzca al presionar Enter
+                btnStartGame_Click(this, new EventArgs()); 
+                e.SuppressKeyPress = true;
             }
         }
-
         #endregion
 
 
