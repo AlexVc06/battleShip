@@ -18,8 +18,6 @@ namespace battleShip
             this.gameData = gameData;
             // Permite que el formulario detecte las teclas presionadas
             this.KeyPreview = true;
-
-            // Asocia el evento KeyDown del formulario al método frmPreparation_KeyDown
             this.KeyDown += new KeyEventHandler(frmPreparation_KeyDown);
 
         }
